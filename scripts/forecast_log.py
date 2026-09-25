@@ -152,9 +152,15 @@ def gate() -> None:
     hits = sum(r["outcome"] == "target1" for r in entered)
     rs = [r["r_net"] for r in entered]
     exp = sum(rs) / len(rs) if rs else 0.0
-    half = len(entered) // 2
-    exp1 = sum(r["r_net"] for r in entered[:half]) / half if half else 0.0
-    exp2 = sum(r["r_net"] for r in entered[half:]) / (len(entered) - half) if len(entered) - half else 0.0
+    # temporal halves split by cycle date, so one cycle never straddles both halves
+    cycles = sorted({r["made_at"] for r in closed})
+    n_cycles = len(cycles)
+    cut = cycles[n_cycles // 2] if n_cycles >= 2 else None
+    first = [r["r_net"] for r in entered if cut and r["made_at"] < cut]
+    second = [r["r_net"] for r in entered if cut and r["made_at"] >= cut]
+    half = min(len(first), len(second))
+    exp1 = sum(first) / len(first) if first else 0.0
+    exp2 = sum(second) / len(second) if second else 0.0
     lo, hi = wilson(hits, n_ent)
     checks = {
         f"≥{GATES['min_directional_forecasts']} directional forecasts scored": n_dir >= GATES["min_directional_forecasts"],
@@ -162,15 +168,17 @@ def gate() -> None:
         f"hit rate ≥{GATES['min_hit_rate_target1']:.0%}": n_ent > 0 and hits / n_ent >= GATES["min_hit_rate_target1"],
         f"expectancy ≥ +{GATES['min_expectancy_r_net']:.2f} R net": exp >= GATES["min_expectancy_r_net"],
         "both temporal halves positive": half > 0 and exp1 > 0 and exp2 > 0,
+        f"≥{GATES.get('min_distinct_cycles', 0)} distinct cycle dates": n_cycles >= GATES.get("min_distinct_cycles", 0),
     }
     passed = all(checks.values())
-    sample_ok = n_dir >= GATES["min_directional_forecasts"]
+    sample_ok = n_dir >= GATES["min_directional_forecasts"] and n_cycles >= GATES.get("min_distinct_cycles", 0)
     verdict = ("GATE PASSED — proceed to Phase 2 (Freqtrade dry-run)" if passed else
                "GATE FAILED — confirmed negative result" if sample_ok else
-               f"NOT YET DECIDABLE — {n_dir}/{GATES['min_directional_forecasts']} directional forecasts scored")
+               f"NOT YET DECIDABLE — {n_dir}/{GATES['min_directional_forecasts']} directional forecasts, "
+               f"{n_cycles}/{GATES.get('min_distinct_cycles', 0)} cycles scored")
     print(verdict)
     print(f"  entered {n_ent}/{n_dir} · hit rate {hits}/{n_ent} (95% CI {lo:.0%}–{hi:.0%}) · "
-          f"expectancy {exp:+.2f} R net · halves {exp1:+.2f} / {exp2:+.2f}")
+          f"expectancy {exp:+.2f} R net · halves {exp1:+.2f} / {exp2:+.2f} · cycles {n_cycles}")
     for k, v in checks.items():
         print(f"  [{'x' if v else ' '}] {k}")
     open_n = c.execute("SELECT COUNT(*) FROM forecasts WHERE status IN ('open','entered') AND bias IN ('LONG','SHORT')").fetchone()[0]
