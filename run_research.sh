@@ -10,7 +10,7 @@ set -a; [ -f .env ] && . ./.env; set +a
 pip install -q -r requirements.txt
 DATE=$(date -u +%F)
 INSTRUMENTS=("$@"); [ ${#INSTRUMENTS[@]} -eq 0 ] && mapfile -t INSTRUMENTS < research/instruments.txt
-AGENT_CMD="${AGENT_CMD:-gemini --yolo -p}"   # Claude Code: AGENT_CMD='claude --dangerously-skip-permissions -p'
+AGENT_CMD="${AGENT_CMD:-scripts/agent.sh}"
 
 for INST in "${INSTRUMENTS[@]}"; do
   echo "== $INST $DATE"
