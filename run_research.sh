@@ -14,7 +14,7 @@ AGENT_CMD="${AGENT_CMD:-scripts/agent.sh}"
 
 for INST in "${INSTRUMENTS[@]}"; do
   echo "== $INST $DATE"
-  if [ "${VT_DATA:-local}" = colab ]; then ./run_colab.sh "$INST"; else python scripts/pipeline.py "$INST" --out out; fi
+  if [ "${VT_DATA:-local}" = colab ]; then ./run_colab.sh "$INST" || { echo "[colab] failed, using local"; python scripts/pipeline.py "$INST" --out out; }; else python scripts/pipeline.py "$INST" --out out; fi
   if [ "${AGENT_SKIP:-0}" != 1 ]; then
     PROMPT=$(sed "s/{{DATE}}/$DATE/g; s/{{CONTRACT}}/$INST/g" prompt.md)
     $AGENT_CMD "Read AGENTS.md. The pipeline has already been run; its output is in ./out. Then do this: $PROMPT" \

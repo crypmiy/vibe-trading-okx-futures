@@ -7,5 +7,5 @@ Type=oneshot
 User=jetson
 WorkingDirectory=/home/jetson/vibe-trading-okx-futures
 EnvironmentFile=/home/jetson/vibe-trading-okx-futures/.env
-Environment=VT_DATA=local
+Environment=PATH=/home/jetson/.local/bin:/usr/local/bin:/usr/bin:/bin
 ExecStart=/home/jetson/vibe-trading-okx-futures/run_research.sh
