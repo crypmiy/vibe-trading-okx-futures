@@ -20,7 +20,7 @@ for INST in "${INSTRUMENTS[@]}"; do
     $AGENT_CMD "Read AGENTS.md. The pipeline has already been run; its output is in ./out. Then do this: $PROMPT" \
       > "reports/${INST}_agent_${DATE}.log" 2>&1 || { echo "[agent] failed for $INST"; python scripts/notify.py "vibe: agent failed for $INST $DATE (see reports/${INST}_agent_${DATE}.log)"; }
     LATEST=$(ls -t reports/${INST}_OKX_Swap_Report_*.md 2>/dev/null | head -1)
-    [ -n "$LATEST" ] && python scripts/notify.py "$(python - "$LATEST" << 'PY'
+    [ -z "$LATEST" ] || python scripts/notify.py "$(python - "$LATEST" << 'PY'
 import json,re,sys
 t=open(sys.argv[1],errors="ignore").read(); m=re.search(r"```json\s*(\{.*?\})\s*```",t,re.S)
 f=json.loads(m.group(1))["forecast"] if m else {}
