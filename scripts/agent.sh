@@ -1,20 +1,23 @@
 #!/usr/bin/env bash
-# Agent with model fallback.
-# GEMINI_MODELS in .env, tried in order.
-# "default" = CLI default model.
-MODELS="${GEMINI_MODELS:-default}"
+# Research agent via Antigravity CLI (agy).
+# AGY_MODEL: model slug (see: agy models).
+# AGY_TTY=1: run under a pseudo-TTY if -p hangs.
+P=$(mktemp)
+printf '%s' "$1" > "$P"
+ARGS="--dangerously-skip-permissions --print-timeout 20m"
+[ -n "$AGY_MODEL" ] && ARGS="$ARGS --model $AGY_MODEL"
+CMD="agy $ARGS -p \"\$(cat $P)\""
 for round in 1 2; do
-  for m in $MODELS; do
-    echo "[agent.sh] round $round model $m" >&2
-    if [ "$m" = default ]; then
-      timeout 20m gemini --yolo -p "$1" && exit 0
-    else
-      timeout 20m gemini -m "$m" --yolo -p "$1" && exit 0
-    fi
-  done
+  echo "[agent.sh] round $round model ${AGY_MODEL:-default}" >&2
+  if [ "${AGY_TTY:-0}" = 1 ]; then
+    timeout 25m script -qec "$CMD" /dev/null && { rm -f "$P"; exit 0; }
+  else
+    timeout 25m bash -c "$CMD" && { rm -f "$P"; exit 0; }
+  fi
   if [ "$round" = 1 ]; then
-    echo "[agent.sh] all failed, wait 5 min" >&2
+    echo "[agent.sh] failed, wait 5 min" >&2
     sleep 300
   fi
 done
+rm -f "$P"
 exit 1

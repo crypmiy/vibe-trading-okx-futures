@@ -32,3 +32,4 @@ Risk 0.5–1 % of equity per trade at the stop. Not part of this repo's automati
 
 ## Notes log
 - 2026-09-25: plan registered.
+- 2026-09-25: analyst = Antigravity CLI (agy), model gemini-3.8-flash-high, fixed for all Phase 1 samples.
