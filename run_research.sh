@@ -4,6 +4,7 @@
 # Env: VT_DATA=local|colab (default local), AGENT_CMD (default: gemini headless), AGENT_SKIP=1 to only score.
 set -euo pipefail
 cd "$(dirname "$0")"
+set -a; [ -f .env ] && . ./.env; set +a
 [ -d .venv ] || python3 -m venv .venv
 . .venv/bin/activate
 pip install -q -r requirements.txt
