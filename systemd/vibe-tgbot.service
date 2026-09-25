@@ -5,6 +5,7 @@ After=network-online.target
 [Service]
 User=jetson
 WorkingDirectory=/home/jetson/vibe-trading-okx-futures
+Environment=PATH=/home/jetson/.local/bin:/usr/local/bin:/usr/bin:/bin
 EnvironmentFile=/home/jetson/vibe-trading-okx-futures/.env
 ExecStart=/home/jetson/vibe-trading-okx-futures/.venv/bin/python scripts/tg_bot.py
 Restart=always

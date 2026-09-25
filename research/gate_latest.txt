@@ -5,4 +5,4 @@ NOT YET DECIDABLE — 0/30 directional forecasts scored
   [ ] hit rate ≥50%
   [ ] expectancy ≥ +0.10 R net
   [ ] both temporal halves positive
-  open/entered: 0 · NO_TRADE calls: 0
+  open/entered: 1 · NO_TRADE calls: 0
