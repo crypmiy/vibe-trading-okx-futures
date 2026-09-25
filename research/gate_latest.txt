@@ -1,0 +1,8 @@
+NOT YET DECIDABLE — 0/30 directional forecasts scored
+  entered 0/0 · hit rate 0/0 (95% CI 0%–0%) · expectancy +0.00 R net · halves +0.00 / +0.00
+  [ ] ≥30 directional forecasts scored
+  [ ] ≥50% entered
+  [ ] hit rate ≥50%
+  [ ] expectancy ≥ +0.10 R net
+  [ ] both temporal halves positive
+  open/entered: 0 · NO_TRADE calls: 0

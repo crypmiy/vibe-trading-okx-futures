@@ -1,0 +1,20 @@
+{
+  "registered_on": "2026-09-25",
+  "phase1_forecast_gate": {
+    "min_directional_forecasts": 30,
+    "min_entered_share": 0.5,
+    "min_hit_rate_target1": 0.5,
+    "min_expectancy_r_net": 0.10,
+    "temporal_split": "first_half_vs_second_half",
+    "both_halves_expectancy_positive": true,
+    "fee_taker_per_side": 0.0005,
+    "slippage_per_side": 0.0005,
+    "entry_window_hours": 48,
+    "same_candle_stop_and_target": "counts_as_stop"
+  },
+  "phase2_dryrun_gate": {
+    "min_closed_trades": 20,
+    "max_abs_r_gap_vs_forecast_eval": 0.25,
+    "dry_run_expectancy_r_net_min": 0.10
+  }
+}

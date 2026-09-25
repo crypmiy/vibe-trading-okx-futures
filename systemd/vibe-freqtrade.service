@@ -1,0 +1,14 @@
+[Unit]
+Description=vibe-trading-okx-futures Freqtrade dry-run (Phase 2)
+After=network-online.target
+
+[Service]
+User=jetson
+WorkingDirectory=/home/jetson/vibe-trading-okx-futures/freqtrade
+EnvironmentFile=/home/jetson/vibe-trading-okx-futures/.env
+ExecStart=/home/jetson/vibe-trading-okx-futures/freqtrade/.venv/bin/freqtrade trade --config config.dryrun.json --userdir user_data --strategy VibeForecastStrategy
+Restart=on-failure
+RestartSec=30
+
+[Install]
+WantedBy=multi-user.target

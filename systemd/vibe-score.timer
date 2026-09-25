@@ -1,0 +1,9 @@
+[Unit]
+Description=Score open forecasts daily (no agent, no data run)
+
+[Timer]
+OnCalendar=*-*-* 02:00:00 UTC
+Persistent=true
+
+[Install]
+WantedBy=timers.target

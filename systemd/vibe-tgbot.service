@@ -1,0 +1,14 @@
+[Unit]
+Description=vibe-trading-okx-futures research Telegram bot
+After=network-online.target
+
+[Service]
+User=jetson
+WorkingDirectory=/home/jetson/vibe-trading-okx-futures
+EnvironmentFile=/home/jetson/vibe-trading-okx-futures/.env
+ExecStart=/home/jetson/vibe-trading-okx-futures/.venv/bin/python scripts/tg_bot.py
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target

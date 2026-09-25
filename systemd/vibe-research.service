@@ -1,0 +1,11 @@
+[Unit]
+Description=vibe-trading-okx-futures research cycle
+After=network-online.target
+
+[Service]
+Type=oneshot
+User=jetson
+WorkingDirectory=/home/jetson/vibe-trading-okx-futures
+EnvironmentFile=/home/jetson/vibe-trading-okx-futures/.env
+Environment=VT_DATA=local
+ExecStart=/home/jetson/vibe-trading-okx-futures/run_research.sh

@@ -1,0 +1,11 @@
+[Unit]
+Description=vibe-trading-okx-futures daily forecast scoring
+After=network-online.target
+
+[Service]
+Type=oneshot
+User=jetson
+WorkingDirectory=/home/jetson/vibe-trading-okx-futures
+EnvironmentFile=/home/jetson/vibe-trading-okx-futures/.env
+Environment=AGENT_SKIP=1
+ExecStart=/bin/bash -c '. .venv/bin/activate && python scripts/forecast_log.py evaluate && python scripts/forecast_log.py export-signals signals/active.json && python scripts/forecast_log.py gate | tee research/gate_latest.txt'
