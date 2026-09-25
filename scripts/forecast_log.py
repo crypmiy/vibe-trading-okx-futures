@@ -145,7 +145,8 @@ def wilson(k: int, n: int, z: float = 1.96) -> tuple[float, float]:
 
 def gate() -> None:
     c = db()
-    directional = c.execute("SELECT * FROM forecasts WHERE bias IN ('LONG','SHORT') ORDER BY made_at").fetchall()
+    directional = c.execute("SELECT * FROM forecasts WHERE bias IN ('LONG','SHORT') AND made_at >= ? ORDER BY made_at",
+                            (GATES.get("count_from", "0000-00-00"),)).fetchall()
     closed = [r for r in directional if r["status"] == "closed"]
     entered = [r for r in closed if r["outcome"] != "not_entered"]
     n_dir, n_ent = len(closed), len(entered)

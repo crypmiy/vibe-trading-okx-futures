@@ -1,8 +1,8 @@
 [Unit]
-Description=Score open forecasts daily (no agent, no data run)
+Description=Score open forecasts 00:05 UTC (07:05 WIB), before the research cycle
 
 [Timer]
-OnCalendar=*-*-* 02:00:00 UTC
+OnCalendar=*-*-* 00:05:00 UTC
 Persistent=true
 
 [Install]

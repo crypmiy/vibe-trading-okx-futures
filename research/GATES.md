@@ -34,3 +34,4 @@ Risk 0.5–1 % of equity per trade at the stop. Not part of this repo's automati
 - 2026-09-25: plan registered.
 - 2026-09-25: analyst = Antigravity CLI (agy), model gemini-3.8-flash-high, fixed for all Phase 1 samples.
 - 2026-09-25: universe widened to 8 swaps (research/instruments.txt); added min 8 distinct cycle dates; temporal halves split by cycle date. Changed before the first forecast was scored.
+- 2026-09-25: PROTOCOL v2 (daily). Hypothesis changed from multi-day swing to daily trades: BTC/ETH/SOL every day at 00:15 UTC, horizon 1 day, entry window 12 h, gate needs ≥30 directional forecasts and ≥20 distinct cycle dates. Only forecasts made on/after 2026-09-26 count; earlier v1 forecasts are scored for information only.

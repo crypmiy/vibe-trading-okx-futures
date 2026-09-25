@@ -23,7 +23,7 @@ Part 1: Contract & Market Structure (Utilize summary.json → contract_specs, ti
 
 Part 2: Price Action & Technical Analysis (Utilize chart_1h.png, chart_4h.png, chart_1d.png and timeframes.*)
 
-    Multi-timeframe trend structure: relationship of price to EMA20/50/200 on 1d, 4h and 1h. State where the timeframes agree and where they conflict.
+    Multi-timeframe trend structure: relationship of price to EMA20/50/200 on 1d, 4h and 1h. The 1d chart sets context only; entry, stop and targets must be derived from the 4h and 1h structure, sized for a move that can realistically happen within 24 hours (use ATR% of the 1h and 4h timeframes). State where the timeframes agree and where they conflict.
     Momentum: RSI14 and MACD histogram per timeframe; note divergences between price and momentum.
     Volatility regime: ATR% and 30-day realized volatility. Is the market compressed (breakout risk) or expanded (mean-reversion risk)?
     Key levels: use the pivot-derived support/resistance lists as candidates and confirm or reject them visually on the charts.
@@ -43,12 +43,12 @@ Part 4: Narrative, Catalysts & Cross-Market Context (Utilize web search)
 
 Part 5: Synthesis & Trade Plan
 
-    Core Thesis: in 3–5 sentences, the single most important reason to be long, short, or flat this contract over the next 1–4 weeks.
+    Core Thesis: in 3–5 sentences, the single most important reason to be long, short, or flat this contract over the next 24 hours (daily trade: entered today, closed within one day).
     Directional Bias: LONG / SHORT / NO TRADE, with a confidence level (low / medium / high) and the two or three pieces of evidence carrying most of the weight.
     Trade Plan (only if bias is LONG or SHORT):
         Entry zone (price range), invalidation level (hard stop) and why it sits there, first and second profit targets, and the resulting reward-to-risk ratio.
         Position sizing in terms of risk per trade (e.g. 0.5–1% of equity at the stop), and the maximum leverage that keeps liquidation price far beyond the stop.
-        Funding-adjusted holding period: how many days of expected funding the trade can absorb before carry eats the edge.
+        Funding and cost check: how many funding settlements fall inside the 24-hour holding window, and whether fees (0.05% per side) plus funding still leave the target at least 1.5× the stop distance.
     What Invalidates the Thesis: a concrete checklist of data changes (funding flips, OI behaviour, level breaks, news) that should cause the position to be closed or the bias to be revisited.
     Confidence & Limitations: what data you did not have, what you assumed, and what a stricter analyst would still want to see.
 
@@ -59,7 +59,7 @@ Present your findings as a professional derivatives research report in Markdown,
 Immediately after the title, before the executive summary, include exactly one machine-readable forecast block (it is parsed by `scripts/forecast_log.py`; keep the keys and the fenced ```json exactly as shown, numbers unquoted, `null` where a field does not apply):
 
 ```json
-{"forecast": {"instrument": "{{CONTRACT}}", "date": "{{DATE}}", "bias": "LONG | SHORT | NO_TRADE", "confidence": "low | medium | high", "entry_low": 0.0, "entry_high": 0.0, "stop": 0.0, "target1": 0.0, "target2": null, "horizon_days": 7, "invalidation": ["one line per condition"]}}
+{"forecast": {"instrument": "{{CONTRACT}}", "date": "{{DATE}}", "bias": "LONG | SHORT | NO_TRADE", "confidence": "low | medium | high", "entry_low": 0.0, "entry_high": 0.0, "stop": 0.0, "target1": 0.0, "target2": null, "horizon_days": 1, "invalidation": ["one line per condition"]}}
 ```
 
 For NO_TRADE set entry/stop/target fields to null. Stop and target1 must be consistent with the bias (LONG: stop < entry_low ≤ entry_high < target1).

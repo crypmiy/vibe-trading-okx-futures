@@ -9,9 +9,11 @@
     "both_halves_expectancy_positive": true,
     "fee_taker_per_side": 0.0005,
     "slippage_per_side": 0.0005,
-    "entry_window_hours": 48,
+    "entry_window_hours": 12,
     "same_candle_stop_and_target": "counts_as_stop",
-    "min_distinct_cycles": 8
+    "min_distinct_cycles": 20,
+    "protocol": "v2-daily",
+    "count_from": "2026-09-26"
   },
   "phase2_dryrun_gate": {
     "min_closed_trades": 20,

@@ -1,8 +1,8 @@
 [Unit]
-Description=Run vibe research every Monday and Thursday 01:00 UTC
+Description=Daily vibe research cycle 00:15 UTC (07:15 WIB), after the UTC daily close
 
 [Timer]
-OnCalendar=Mon,Thu *-*-* 01:00:00 UTC
+OnCalendar=*-*-* 00:15:00 UTC
 Persistent=true
 
 [Install]
