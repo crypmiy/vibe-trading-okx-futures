@@ -36,3 +36,24 @@ python scripts/forecast_log.py export-signals signals/active.json
 python scripts/forecast_log.py gate | tee research/gate_latest.txt
 python scripts/notify.py "vibe cycle $DATE done: ${INSTRUMENTS[*]}
 $(head -2 research/gate_latest.txt)"
+
+# --- publish research record (auto-commit + push) ---
+python - << 'PY'
+import csv, sqlite3
+c = sqlite3.connect("research/forecasts.sqlite"); c.row_factory = sqlite3.Row
+rows = c.execute("SELECT * FROM forecasts ORDER BY made_at, instrument").fetchall()
+with open("research/forecasts.csv", "w", newline="") as f:
+    w = csv.writer(f)
+    if rows:
+        w.writerow(rows[0].keys()); w.writerows([tuple(r) for r in rows])
+PY
+if [ "${VT_AUTOPUSH:-1}" = 1 ]; then
+  git add reports/*.md research/gate_latest.txt research/forecasts.csv
+  if ! git diff --cached --quiet; then
+    git commit -qm "Research cycle $DATE: ${INSTRUMENTS[*]}" \
+      && git pull -q --rebase --autostash origin main \
+      && git push -q origin main \
+      && echo "[autopush] pushed" \
+      || python scripts/notify.py "vibe: auto-push failed for $DATE (reports are saved locally)"
+  fi
+fi
