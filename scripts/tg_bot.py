@@ -60,7 +60,8 @@ def cmd_open(_: list[str]) -> str:
         return "no open forecasts"
     return "\n".join(f"{r['instrument']} {r['made_at']} {r['bias']} ({r['confidence']}) "
                      f"zone {r['entry_low']}–{r['entry_high']} stop {r['stop']} tgt {r['target1']} · {r['status']}"
-                     + (f" @ {r['entry_px']}" if r['entry_px'] else "") for r in rows)
+                     + (f" @ {r['entry_px']}" if r['entry_px'] else "")
+                     + (" [v1, info only]" if r['made_at'] < fl.GATES.get("count_from", "") else "") for r in rows)
 
 
 def cmd_last(args: list[str]) -> str:

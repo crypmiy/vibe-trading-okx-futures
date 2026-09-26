@@ -192,7 +192,8 @@ def export_signals(path: Path) -> None:
     c = db()
     now = dt.datetime.now(dt.timezone.utc)
     out = []
-    for r in c.execute("SELECT * FROM forecasts WHERE bias IN ('LONG','SHORT') AND status IN ('open','entered')"):
+    for r in c.execute("SELECT * FROM forecasts WHERE bias IN ('LONG','SHORT') AND status IN ('open','entered') "
+                       "AND made_at >= ?", (GATES.get("count_from", "0000-00-00"),)):
         made = dt.datetime.fromisoformat(r["made_at"]).replace(tzinfo=dt.timezone.utc)
         out.append({"instrument": r["instrument"], "pair": r["instrument"].replace("-USDT-SWAP", "/USDT:USDT"),
                     "side": r["bias"].lower(), "entry_low": r["entry_low"], "entry_high": r["entry_high"],
