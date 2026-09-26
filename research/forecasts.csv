@@ -1,0 +1,5 @@
+id,report,instrument,made_at,bias,confidence,entry_low,entry_high,stop,target1,target2,horizon_days,status,entered_at,entry_px,exit_at,exit_px,outcome,r_gross,r_net,funding_pct,evaluated_at
+39c6e393911f,BTC-USDT-SWAP_OKX_Swap_Report_2026-09-25.md,BTC-USDT-SWAP,2026-09-25,LONG,medium,83100.0,83600.0,82450.0,85200.0,87200.0,7,entered,2026-09-25T13:00:00+00:00,83600.0,,,,,,,
+cfd320bd5962,BTC-USDT-SWAP_OKX_Swap_Report_2026-09-26.md,BTC-USDT-SWAP,2026-09-26,LONG,medium,83800.0,84100.0,82750.0,85950.0,87200.0,1,entered,2026-09-26T00:00:00+00:00,84013.8,,,,,,,
+1547d55b0487,ETH-USDT-SWAP_OKX_Swap_Report_2026-09-26.md,ETH-USDT-SWAP,2026-09-26,LONG,medium,2680.0,2692.0,2646.0,2755.0,2795.0,1,entered,2026-09-26T00:00:00+00:00,2687.47,,,,,,,
+806404c87152,SOL-USDT-SWAP_OKX_Swap_Report_2026-09-26.md,SOL-USDT-SWAP,2026-09-26,LONG,medium,121.2,122.25,119.6,125.6,127.4,1,entered,2026-09-26T00:00:00+00:00,122.16,,,,,,,
