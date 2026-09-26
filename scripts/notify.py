@@ -16,6 +16,9 @@ def load_env() -> None:
             if "=" in line:
                 k, v = line.split("=", 1)
                 os.environ.setdefault(k.strip(), v.strip())
+    for k in ("TG_TOKEN", "TG_CHAT_ID"):
+        if k in os.environ:
+            os.environ[k] = os.environ[k].split("#", 1)[0].strip()
 
 
 def send(text: str, silent: bool = False) -> bool:
