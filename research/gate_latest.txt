@@ -6,4 +6,4 @@ NOT YET DECIDABLE — 0/30 directional forecasts, 0/20 cycles scored
   [ ] expectancy ≥ +0.10 R net
   [ ] both temporal halves positive
   [ ] ≥20 distinct cycle dates
-  open/entered: 4 · NO_TRADE calls: 0
+  open/entered: 7 · NO_TRADE calls: 0
