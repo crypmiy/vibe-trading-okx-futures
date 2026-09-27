@@ -1,9 +1,9 @@
-NOT YET DECIDABLE — 0/30 directional forecasts, 0/20 cycles scored
-  entered 0/0 · hit rate 0/0 (95% CI 0%–0%) · expectancy +0.00 R net · halves +0.00 / +0.00 · cycles 0
+NOT YET DECIDABLE — 3/30 directional forecasts, 1/20 cycles scored
+  entered 3/3 · hit rate 0/3 (95% CI 0%–56%) · expectancy -0.23 R net · halves +0.00 / +0.00 · cycles 1
   [ ] ≥30 directional forecasts scored
-  [ ] ≥50% entered
+  [x] ≥50% entered
   [ ] hit rate ≥50%
   [ ] expectancy ≥ +0.10 R net
   [ ] both temporal halves positive
   [ ] ≥20 distinct cycle dates
-  open/entered: 7 · NO_TRADE calls: 0
+  open/entered: 4 · NO_TRADE calls: 0

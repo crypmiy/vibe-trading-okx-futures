@@ -40,9 +40,29 @@ CREATE TABLE IF NOT EXISTS forecasts (
 );
 """
 
+def _mtime(path: Path) -> str:
+    return dt.datetime.fromtimestamp(path.stat().st_mtime, dt.timezone.utc).isoformat(timespec="seconds")
+
+
+def _created(r) -> dt.datetime:
+    """When the forecast really existed: report write time; fallback 00:00 UTC of made_at."""
+    v = r["created_at"] if "created_at" in r.keys() else None
+    if v:
+        return dt.datetime.fromisoformat(v)
+    return dt.datetime.fromisoformat(r["made_at"]).replace(tzinfo=dt.timezone.utc)
+
+
 def db() -> sqlite3.Connection:
     DB.parent.mkdir(exist_ok=True)
     c = sqlite3.connect(DB); c.executescript(SCHEMA); c.row_factory = sqlite3.Row
+    cols = {row[1] for row in c.execute("PRAGMA table_info(forecasts)")}
+    if "created_at" not in cols:
+        c.execute("ALTER TABLE forecasts ADD COLUMN created_at TEXT")
+    for r in c.execute("SELECT id, report FROM forecasts WHERE created_at IS NULL AND report IS NOT NULL").fetchall():
+        rp = ROOT / "reports" / r["report"]
+        if rp.exists():
+            c.execute("UPDATE forecasts SET created_at=? WHERE id=?", (_mtime(rp), r["id"]))
+    c.commit()
     return c
 
 
@@ -67,10 +87,10 @@ def ingest(folder: Path) -> None:
         if c.execute("SELECT 1 FROM forecasts WHERE id=?", (fid,)).fetchone():
             continue
         c.execute("""INSERT INTO forecasts(id,report,instrument,made_at,bias,confidence,entry_low,entry_high,
-                     stop,target1,target2,horizon_days) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)""",
+                     stop,target1,target2,horizon_days,created_at) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)""",
                   (fid, p.name, f["instrument"], f["date"], f["bias"], f.get("confidence"),
                    f.get("entry_low"), f.get("entry_high"), f.get("stop"), f.get("target1"),
-                   f.get("target2"), int(f.get("horizon_days", 7))))
+                   f.get("target2"), int(f.get("horizon_days", 7)), _mtime(p)))
         n += 1
     c.commit(); print(f"[ingest] {n} new forecast(s), db={DB}")
 
@@ -79,22 +99,24 @@ def ingest(folder: Path) -> None:
 def evaluate() -> None:
     import okx_futures as gf
     c = db()
-    rows = c.execute("SELECT * FROM forecasts WHERE status='open' AND bias IN ('LONG','SHORT')").fetchall()
+    rows = c.execute("SELECT * FROM forecasts WHERE status IN ('open','entered') AND bias IN ('LONG','SHORT')").fetchall()
     now = dt.datetime.now(dt.timezone.utc)
     for r in rows:
         made = dt.datetime.fromisoformat(r["made_at"]).replace(tzinfo=dt.timezone.utc)
-        horizon_end = made + dt.timedelta(days=r["horizon_days"])
+        created = _created(r)
+        start = (created + dt.timedelta(minutes=59)).replace(minute=0, second=0, microsecond=0)
+        horizon_end = created + dt.timedelta(days=r["horizon_days"])
         days = max(1, math.ceil((now - made).total_seconds() / 86400) + 1)
         df = gf.candles(r["instrument"], "1h", days)
-        df = df[df.index >= made]
+        df = df[df.index >= start]
         if df.empty:
             continue
         side = 1 if r["bias"] == "LONG" else -1
         lo, hi = sorted([r["entry_low"], r["entry_high"]])
-        win = df[df.index <= made + dt.timedelta(hours=GATES["entry_window_hours"])]
+        win = df[df.index <= created + dt.timedelta(hours=GATES["entry_window_hours"])]
         hit = win[(win.low <= hi) & (win.high >= lo)]
         if hit.empty:
-            if now > made + dt.timedelta(hours=GATES["entry_window_hours"]):
+            if now > created + dt.timedelta(hours=GATES["entry_window_hours"]):
                 c.execute("UPDATE forecasts SET status='closed', outcome='not_entered', evaluated_at=? WHERE id=?",
                           (now.isoformat(), r["id"]))
             continue
@@ -109,7 +131,7 @@ def evaluate() -> None:
                 outcome, exit_at, exit_px = "stop", t, r["stop"]; break
             if tgt_hit:
                 outcome, exit_at, exit_px = "target1", t, r["target1"]; break
-            if t >= horizon_end:
+            if t + dt.timedelta(hours=1) >= horizon_end:
                 outcome, exit_at, exit_px = "horizon", t, float(k.close); break
         if outcome is None:
             if now < horizon_end:
@@ -194,7 +216,7 @@ def export_signals(path: Path) -> None:
     out = []
     for r in c.execute("SELECT * FROM forecasts WHERE bias IN ('LONG','SHORT') AND status IN ('open','entered') "
                        "AND made_at >= ?", (GATES.get("count_from", "0000-00-00"),)):
-        made = dt.datetime.fromisoformat(r["made_at"]).replace(tzinfo=dt.timezone.utc)
+        made = _created(r)
         out.append({"instrument": r["instrument"], "pair": r["instrument"].replace("-USDT-SWAP", "/USDT:USDT"),
                     "side": r["bias"].lower(), "entry_low": r["entry_low"], "entry_high": r["entry_high"],
                     "stop": r["stop"], "target1": r["target1"], "made_at": r["made_at"],
