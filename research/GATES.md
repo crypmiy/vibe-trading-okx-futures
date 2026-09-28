@@ -38,3 +38,10 @@ Risk 0.5–1 % of equity per trade at the stop. Not part of this repo's automati
 - 2026-09-27: scoring bug fixed before any v2 forecast was scored: 'entered' forecasts were never re-evaluated; entry/horizon clock now starts at report write time (first full 1h candle after), horizon exit at the close of the candle containing the horizon end. Stuck forecasts re-scored from price history with unchanged rules.
 - 2026-09-28: known limitation, not changed mid-sample: horizon exits can occur up to ~30 min before horizon end because the 00:05 UTC scoring uses the in-progress 1h candle; Freqtrade mirrors this via forecast_withdrawn. Unbiased in direction; applied identically to all v2 forecasts.
 - 2026-09-28: CONTROL GROUP added before any verdict: always-long and always-short baselines on every v2 directional forecast (same instrument, window, stop/target distances, costs, scoring rules; entry at the open of the first full 1h candle after the report). New gate check: AI mean R per directional forecast (not_entered = 0) must beat the better of the two baselines by ≥ 0.10 R. Baselines are computed from price history for all v2 forecasts, including the ones already scored.
+
+## Decision rules (written before the verdict)
+- Verdict date: morning after the 20th distinct v2 cycle is scored (expected 2026-10-16).
+- GATE PASSED → start Phase 2 (Freqtrade dry-run counts from that day, 1h entry rule unchanged); no prompt/model/universe changes until Phase 2 has its own verdict.
+- GATE FAILED → protocol v2 closed as a confirmed negative result: timers disabled, repo archived with the final gate output and forecasts.csv. No re-run with another model, prompt or coin set under this hypothesis.
+- If the AI fails only the control check (beats zero but not the best constant direction) → counts as FAILED: no edge beyond market direction.
+- Operational outages (agent/data failures) do not extend the window; missing days simply reduce the sample. If fewer than 20 cycles exist by 2026-10-23, verdict = NOT DECIDABLE and the project stops unless a new protocol is pre-registered.
