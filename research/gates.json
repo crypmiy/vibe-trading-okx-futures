@@ -13,7 +13,9 @@
     "same_candle_stop_and_target": "counts_as_stop",
     "min_distinct_cycles": 20,
     "protocol": "v2-daily",
-    "count_from": "2026-09-26"
+    "count_from": "2026-09-26",
+    "min_edge_vs_best_constant_direction": 0.1,
+    "control": "always_long and always_short at the open of the first full 1h candle after each AI report, AI stop/target distances, identical scoring; AI mean R per directional forecast (not_entered = 0) must exceed the better baseline by the margin"
   },
   "phase2_dryrun_gate": {
     "min_closed_trades": 20,

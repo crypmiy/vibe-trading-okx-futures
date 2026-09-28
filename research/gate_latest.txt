@@ -1,9 +1,11 @@
-NOT YET DECIDABLE — 6/30 directional forecasts, 2/20 cycles scored
-  entered 6/6 · hit rate 1/6 (95% CI 3%–56%) · expectancy +0.08 R net · halves -0.23 / +0.39 · cycles 2
+NOT YET DECIDABLE — 9/30 directional forecasts, 3/20 cycles scored
+  entered 8/9 · hit rate 1/8 (95% CI 2%–47%) · expectancy -0.23 R net · halves -0.23 / -0.24 · cycles 3
+  control (R per forecast, n=9): AI -0.21 · always-long -0.36 · always-short +0.12
   [ ] ≥30 directional forecasts scored
   [x] ≥50% entered
   [ ] hit rate ≥50%
   [ ] expectancy ≥ +0.10 R net
   [ ] both temporal halves positive
+  [ ] beats best constant direction by ≥0.10 R/forecast
   [ ] ≥20 distinct cycle dates
-  open/entered: 4 · NO_TRADE calls: 0
+  open/entered: 1 · NO_TRADE calls: 0

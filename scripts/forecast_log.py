@@ -154,9 +154,40 @@ def evaluate() -> None:
         line = f"[eval] {r['instrument']} {r['made_at']} {r['bias']:5} → {outcome:11} R_net={r_net:+.2f}"
         print(line); _notify(line)
     c.commit()
+    try:
+        import baseline
+        baseline.evaluate_baselines(c)
+    except Exception as e:  # noqa: BLE001  (control group must never break scoring)
+        print(f"[baseline] skipped: {e}")
 
 
 # ---------- gate ----------
+def _control(c, closed):
+    import baseline
+    return baseline.compare(c, closed)
+
+
+def _control_check(c, closed) -> dict:
+    m = GATES.get("min_edge_vs_best_constant_direction")
+    if m is None:
+        return {}
+    k = _control(c, closed)
+    base = [k.get(v) for v in ("always_long", "always_short")]
+    ok = (k.get("n_ai", 0) > 0 and None not in base
+          and k.get("n_always_long") == k["n_ai"] == k.get("n_always_short")
+          and k["ai"] - max(base) >= m)
+    return {f"beats best constant direction by ≥{m:.2f} R/forecast": ok}
+
+
+def _control_line(c, closed) -> str:
+    k = _control(c, closed)
+    if not k.get("n_ai"):
+        return "control: no scored forecasts yet"
+    f = lambda v: "n/a" if v is None else f"{v:+.2f}"
+    return (f"control (R per forecast, n={k['n_ai']}): AI {f(k.get('ai'))} · always-long {f(k.get('always_long'))} "
+            f"· always-short {f(k.get('always_short'))}")
+
+
 def wilson(k: int, n: int, z: float = 1.96) -> tuple[float, float]:
     if n == 0:
         return (0.0, 0.0)
@@ -191,6 +222,7 @@ def gate() -> None:
         f"hit rate ≥{GATES['min_hit_rate_target1']:.0%}": n_ent > 0 and hits / n_ent >= GATES["min_hit_rate_target1"],
         f"expectancy ≥ +{GATES['min_expectancy_r_net']:.2f} R net": exp >= GATES["min_expectancy_r_net"],
         "both temporal halves positive": half > 0 and exp1 > 0 and exp2 > 0,
+        **_control_check(c, closed),
         f"≥{GATES.get('min_distinct_cycles', 0)} distinct cycle dates": n_cycles >= GATES.get("min_distinct_cycles", 0),
     }
     passed = all(checks.values())
@@ -202,6 +234,7 @@ def gate() -> None:
     print(verdict)
     print(f"  entered {n_ent}/{n_dir} · hit rate {hits}/{n_ent} (95% CI {lo:.0%}–{hi:.0%}) · "
           f"expectancy {exp:+.2f} R net · halves {exp1:+.2f} / {exp2:+.2f} · cycles {n_cycles}")
+    print("  " + _control_line(c, closed))
     for k, v in checks.items():
         print(f"  [{'x' if v else ' '}] {k}")
     open_n = c.execute("SELECT COUNT(*) FROM forecasts WHERE status IN ('open','entered') AND bias IN ('LONG','SHORT')").fetchone()[0]
