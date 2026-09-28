@@ -1,5 +1,5 @@
-NOT YET DECIDABLE — 3/30 directional forecasts, 1/20 cycles scored
-  entered 3/3 · hit rate 0/3 (95% CI 0%–56%) · expectancy -0.23 R net · halves +0.00 / +0.00 · cycles 1
+NOT YET DECIDABLE — 6/30 directional forecasts, 2/20 cycles scored
+  entered 6/6 · hit rate 1/6 (95% CI 3%–56%) · expectancy +0.08 R net · halves -0.23 / +0.39 · cycles 2
   [ ] ≥30 directional forecasts scored
   [x] ≥50% entered
   [ ] hit rate ≥50%
