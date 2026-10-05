@@ -30,7 +30,7 @@ c = sqlite3.connect("research/forecasts.sqlite")
 last = c.execute("SELECT max(made_at) FROM forecasts").fetchone()[0]
 today = dt.datetime.now(dt.timezone.utc).date().isoformat()
 print(("  ✓" if last == today else "  ✗") + f" latest forecast date: {last}")
-op = c.execute("SELECT count(*) FROM forecasts WHERE status IN ('open','entered')").fetchone()[0]
+op = c.execute("SELECT count(*) FROM forecasts WHERE status IN ('open','entered') AND bias IN ('LONG','SHORT')").fetchone()[0]
 print(f"  · open/entered forecasts: {op}")
 PY
 head -2 research/gate_latest.txt 2>/dev/null | sed 's/^/  · /'

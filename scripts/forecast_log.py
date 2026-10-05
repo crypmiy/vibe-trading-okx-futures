@@ -91,6 +91,8 @@ def ingest(folder: Path) -> None:
                   (fid, p.name, f["instrument"], f["date"], f["bias"], f.get("confidence"),
                    f.get("entry_low"), f.get("entry_high"), f.get("stop"), f.get("target1"),
                    f.get("target2"), int(f.get("horizon_days", 7)), _mtime(p)))
+        if f["bias"] == "NO_TRADE":
+            c.execute("UPDATE forecasts SET status='closed', outcome='no_trade' WHERE id=?", (fid,))
         n += 1
     c.commit(); print(f"[ingest] {n} new forecast(s), db={DB}")
 
