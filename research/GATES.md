@@ -69,3 +69,4 @@ setup; v2 is NOT DECIDABLE and is not merged with any later protocol.
 - Horizon 8 h (one funding period), entry window 4 h; cycle id = UTC date + hour (made_at e.g. 2026-10-06T00).
 - Gate adds: ≥14 distinct calendar days (forecasts within a day are correlated). Other thresholds unchanged.
 - Dates: verdict expected 2026-10-20 (morning after the 14th day is scored); NOT DECIDABLE if <14 directional days by 2026-10-27.
+- 2026-10-05: Freqtrade dry-run history reset before v3 (pre-v3 trades were technical tests; backup in freqtrade/backups/).
