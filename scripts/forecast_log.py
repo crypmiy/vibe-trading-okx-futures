@@ -77,6 +77,12 @@ def parse_report(path: Path) -> dict | None:
     f["bias"] = f.get("bias", "NO_TRADE").upper().replace(" ", "_")
     return f
 
+def _horizon_days(f: dict) -> float:
+    if f.get("horizon_hours") is not None:
+        return float(f["horizon_hours"]) / 24
+    return float(f.get("horizon_days", 7))
+
+
 def ingest(folder: Path) -> None:
     c = db(); n = 0
     for p in sorted(folder.glob("*.md")):
@@ -90,7 +96,7 @@ def ingest(folder: Path) -> None:
                      stop,target1,target2,horizon_days,created_at) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)""",
                   (fid, p.name, f["instrument"], f["date"], f["bias"], f.get("confidence"),
                    f.get("entry_low"), f.get("entry_high"), f.get("stop"), f.get("target1"),
-                   f.get("target2"), int(f.get("horizon_days", 7)), _mtime(p)))
+                   f.get("target2"), _horizon_days(f), _mtime(p)))
         if f["bias"] == "NO_TRADE":
             c.execute("UPDATE forecasts SET status='closed', outcome='no_trade' WHERE id=?", (fid,))
         n += 1
@@ -164,6 +170,14 @@ def evaluate() -> None:
 
 
 # ---------- gate ----------
+def _days_check(closed) -> dict:
+    m = GATES.get("min_distinct_days")
+    if m is None:
+        return {}
+    d = len({r["made_at"][:10] for r in closed})
+    return {f"≥{m} distinct calendar days ({d})": d >= m}
+
+
 def _violation_check(c) -> dict:
     m = GATES.get("max_no_trade_share")
     if m is None:
@@ -236,6 +250,7 @@ def gate() -> None:
         "both temporal halves positive": half > 0 and exp1 > 0 and exp2 > 0,
         **_control_check(c, closed),
         **_violation_check(c),
+        **_days_check(closed),
         f"≥{GATES.get('min_distinct_cycles', 0)} distinct cycle dates": n_cycles >= GATES.get("min_distinct_cycles", 0),
     }
     passed = all(checks.values())

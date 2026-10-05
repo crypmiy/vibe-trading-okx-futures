@@ -63,3 +63,9 @@ setup; v2 is NOT DECIDABLE and is not merged with any later protocol.
 - Decision rules as for v2, with dates moved: verdict expected 2026-10-26; if fewer than 20 directional days by
   2026-11-02 → NOT DECIDABLE and stop. PASSED → Phase 2 dry-run. FAILED → close as negative; no v4 with a looser
   rule on the same hypothesis.
+
+### v3 AMENDMENT 8h (2026-10-05, before the first v3 cycle)
+- Cycles every 8 h at 00:15 / 08:15 / 16:15 UTC (right after OKX funding settlements); scoring at :05.
+- Horizon 8 h (one funding period), entry window 4 h; cycle id = UTC date + hour (made_at e.g. 2026-10-06T00).
+- Gate adds: ≥14 distinct calendar days (forecasts within a day are correlated). Other thresholds unchanged.
+- Dates: verdict expected 2026-10-20 (morning after the 14th day is scored); NOT DECIDABLE if <14 directional days by 2026-10-27.

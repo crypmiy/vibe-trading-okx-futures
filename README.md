@@ -3,7 +3,7 @@
 ![Exchange](https://img.shields.io/badge/exchange-OKX%20USDT%20swaps-black)
 ![Agent](https://img.shields.io/badge/analyst-Antigravity%20CLI%20(agy)-4285F4)
 ![Data](https://img.shields.io/badge/data-Colab%20CLI-F9AB00)
-![Protocol](https://img.shields.io/badge/protocol-v3%20forced%20daily-2ea44f)
+![Protocol](https://img.shields.io/badge/protocol-v3%20forced%208h-2ea44f)
 ![Mode](https://img.shields.io/badge/money-paper%20only-lightgrey)
 
 > An AI analyst writes a daily trade thesis for BTC, ETH and SOL perpetual swaps on OKX.
@@ -16,7 +16,7 @@ Adapted from [wanghsinche/vibe-trading](https://github.com/wanghsinche/vibe-trad
 
 | | |
 |---|---|
-| Protocol | **v3 — forced daily direction**, BTC / ETH / SOL, 1-day horizon, R:R ≥ 1.0, counted from 2026-10-06 (v2 closed 2026-10-05, see GATES.md) |
+| Protocol | **v3 — forced direction every 8 h**, BTC / ETH / SOL, 8 h horizon, R:R ≥ 1.0, counted from 2026-10-06 (v2 closed 2026-10-05, see GATES.md) |
 | Phase | **1 — forecast log** (no capital, no dry-run) |
 | Gate | ≥ 30 directional forecasts **and** ≥ 20 distinct days, then expectancy ≥ +0.10 R net with both temporal halves positive |
 | Live verdict | `python scripts/forecast_log.py gate` or `/gate` on Telegram |

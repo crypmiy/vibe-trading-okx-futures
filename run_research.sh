@@ -8,7 +8,7 @@ set -a; [ -f .env ] && . ./.env; set +a
 [ -d .venv ] || python3 -m venv .venv
 . .venv/bin/activate
 pip install -q -r requirements.txt
-DATE=$(date -u +%F)
+DATE=$(date -u +%Y-%m-%dT%H)
 INSTRUMENTS=("$@"); [ ${#INSTRUMENTS[@]} -eq 0 ] && mapfile -t INSTRUMENTS < research/instruments.txt
 AGENT_CMD="${AGENT_CMD:-scripts/agent.sh}"
 

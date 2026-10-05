@@ -1,8 +1,8 @@
 [Unit]
-Description=Score open forecasts 00:05 UTC (07:05 WIB), before the research cycle
+Description=vibe score every 8 h at :05 past 00/08/16 UTC
 
 [Timer]
-OnCalendar=*-*-* 00:05:00 UTC
+OnCalendar=*-*-* 00,08,16:05:00 UTC
 Persistent=true
 
 [Install]

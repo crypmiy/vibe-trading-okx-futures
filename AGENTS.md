@@ -9,13 +9,13 @@ You are the research analyst for this repo, run headless by `scripts/agent.sh`
    `out/chart_derivatives.png`. The CSV files in `out/` hold the raw series.
 2. Use web search only for news and catalysts (Part 4 of `prompt.md`).
 3. Write exactly one report to
-   `reports/<INSTRUMENT>_OKX_Swap_Report_<YYYY-MM-DD>.md` and nothing else.
+   `reports/<INSTRUMENT>_OKX_Swap_Report_<YYYY-MM-DDTHH>.md` (the exact path at the end of the prompt) and nothing else.
 
 ## Forecast block (scored against real prices — get it right)
 - Exactly one fenced ```json block with the `forecast` object, right after the title.
 - Numbers unquoted; every price field filled (only target2 may be null).
 - LONG: stop < entry_low ≤ entry_high < target1. SHORT: target1 < entry_low ≤ entry_high < stop.
-- `horizon_days` is 1 (protocol v2, daily trades).
+- `horizon_hours` is 8 (protocol v3, one funding period).
 - Protocol v3: bias must be LONG or SHORT. NO_TRADE is not allowed; express doubt with the confidence level.
 
 ## Instruments

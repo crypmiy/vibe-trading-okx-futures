@@ -14,12 +14,12 @@ chk "research timer enabled"                 "systemctl is-active --quiet vibe-r
 chk "scoring timer enabled"                  "systemctl is-active --quiet vibe-score.timer"
 
 echo "[2/5] today's research cycle ($TODAY UTC)"
-n=$(ls reports/*_OKX_Swap_Report_"$TODAY".md 2>/dev/null | wc -l)
+n=$(ls reports/*_OKX_Swap_Report_"$TODAY"*.md 2>/dev/null | wc -l)
 want=$(grep -c . research/instruments.txt)
 [ "$n" -ge "$want" ] && pass "reports today: $n/$want" || fail "reports today: $n/$want"
 last=$(systemctl show vibe-research -p ExecMainStatus --value)
 [ "$last" = 0 ] && pass "last research run exited OK" || fail "last research run exit status: $last"
-errs=$(grep -liE "error|quota|unauth|login" reports/*_agent_"$TODAY".log 2>/dev/null | wc -l)
+errs=$(grep -liE "error|quota|unauth|login" reports/*_agent_"$TODAY"*.log 2>/dev/null | wc -l)
 [ "$errs" = 0 ] && pass "agent logs today clean" || fail "agent logs with errors today: $errs"
 
 echo "[3/5] forecast log"
@@ -29,7 +29,7 @@ import sqlite3, datetime as dt
 c = sqlite3.connect("research/forecasts.sqlite")
 last = c.execute("SELECT max(made_at) FROM forecasts").fetchone()[0]
 today = dt.datetime.now(dt.timezone.utc).date().isoformat()
-print(("  ✓" if last == today else "  ✗") + f" latest forecast date: {last}")
+print(("  ✓" if (last or "").startswith(today) else "  ✗") + f" latest forecast date: {last}")
 op = c.execute("SELECT count(*) FROM forecasts WHERE status IN ('open','entered') AND bias IN ('LONG','SHORT')").fetchone()[0]
 print(f"  · open/entered forecasts: {op}")
 PY

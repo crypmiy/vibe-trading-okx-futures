@@ -9,14 +9,17 @@
     "both_halves_expectancy_positive": true,
     "fee_taker_per_side": 0.0005,
     "slippage_per_side": 0.0005,
-    "entry_window_hours": 12,
+    "entry_window_hours": 4,
     "same_candle_stop_and_target": "counts_as_stop",
     "min_distinct_cycles": 20,
     "protocol": "v3-daily-forced",
     "count_from": "2026-10-06",
     "min_edge_vs_best_constant_direction": 0.1,
     "control": "always_long and always_short at the open of the first full 1h candle after each AI report, AI stop/target distances, identical scoring; AI mean R per directional forecast (not_entered = 0) must exceed the better baseline by the margin",
-    "max_no_trade_share": 0.1
+    "max_no_trade_share": 0.1,
+    "cycle_hours": 8,
+    "horizon_hours": 8,
+    "min_distinct_days": 14
   },
   "phase2_dryrun_gate": {
     "min_closed_trades": 20,
