@@ -8,4 +8,4 @@ NOT YET DECIDABLE — 9/30 directional forecasts, 3/20 cycles scored
   [ ] both temporal halves positive
   [ ] beats best constant direction by ≥0.10 R/forecast
   [ ] ≥20 distinct cycle dates
-  open/entered: 0 · NO_TRADE calls: 18
+  open/entered: 0 · NO_TRADE calls: 21
