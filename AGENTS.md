@@ -13,10 +13,10 @@ You are the research analyst for this repo, run headless by `scripts/agent.sh`
 
 ## Forecast block (scored against real prices — get it right)
 - Exactly one fenced ```json block with the `forecast` object, right after the title.
-- Numbers unquoted; `null` where a field does not apply; NO_TRADE → all price fields null.
+- Numbers unquoted; every price field filled (only target2 may be null).
 - LONG: stop < entry_low ≤ entry_high < target1. SHORT: target1 < entry_low ≤ entry_high < stop.
 - `horizon_days` is 1 (protocol v2, daily trades).
-- NO_TRADE is a valid, often correct answer.
+- Protocol v3: bias must be LONG or SHORT. NO_TRADE is not allowed; express doubt with the confidence level.
 
 ## Instruments
 OKX swaps use `BASE-USDT-SWAP` (`BTC-USDT-SWAP`, `ETH-USDT-SWAP`, `SOL-USDT-SWAP`).

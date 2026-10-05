@@ -164,6 +164,16 @@ def evaluate() -> None:
 
 
 # ---------- gate ----------
+def _violation_check(c) -> dict:
+    m = GATES.get("max_no_trade_share")
+    if m is None:
+        return {}
+    cf = GATES.get("count_from", "0000-00-00")
+    tot = c.execute("SELECT COUNT(*) FROM forecasts WHERE made_at >= ?", (cf,)).fetchone()[0]
+    bad = c.execute("SELECT COUNT(*) FROM forecasts WHERE made_at >= ? AND bias NOT IN ('LONG','SHORT')", (cf,)).fetchone()[0]
+    return {f"NO_TRADE/invalid ≤{m:.0%} of forecasts ({bad}/{tot})": tot > 0 and bad / tot <= m}
+
+
 def _control(c, closed):
     import baseline
     return baseline.compare(c, closed)
@@ -225,6 +235,7 @@ def gate() -> None:
         f"expectancy ≥ +{GATES['min_expectancy_r_net']:.2f} R net": exp >= GATES["min_expectancy_r_net"],
         "both temporal halves positive": half > 0 and exp1 > 0 and exp2 > 0,
         **_control_check(c, closed),
+        **_violation_check(c),
         f"≥{GATES.get('min_distinct_cycles', 0)} distinct cycle dates": n_cycles >= GATES.get("min_distinct_cycles", 0),
     }
     passed = all(checks.values())
@@ -240,7 +251,8 @@ def gate() -> None:
     for k, v in checks.items():
         print(f"  [{'x' if v else ' '}] {k}")
     open_n = c.execute("SELECT COUNT(*) FROM forecasts WHERE status IN ('open','entered') AND bias IN ('LONG','SHORT')").fetchone()[0]
-    nt = c.execute("SELECT COUNT(*) FROM forecasts WHERE bias='NO_TRADE'").fetchone()[0]
+    nt = c.execute("SELECT COUNT(*) FROM forecasts WHERE bias='NO_TRADE' AND made_at >= ?",
+                   (GATES.get("count_from", "0000-00-00"),)).fetchone()[0]
     print(f"  open/entered: {open_n} · NO_TRADE calls: {nt}")
 
 

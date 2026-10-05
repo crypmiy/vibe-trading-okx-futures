@@ -45,3 +45,21 @@ Risk 0.5–1 % of equity per trade at the stop. Not part of this repo's automati
 - GATE FAILED → protocol v2 closed as a confirmed negative result: timers disabled, repo archived with the final gate output and forecasts.csv. No re-run with another model, prompt or coin set under this hypothesis.
 - If the AI fails only the control check (beats zero but not the best constant direction) → counts as FAILED: no edge beyond market direction.
 - Operational outages (agent/data failures) do not extend the window; missing days simply reduce the sample. If fewer than 20 cycles exist by 2026-10-23, verdict = NOT DECIDABLE and the project stops unless a new protocol is pre-registered.
+
+## Protocol v2 — closed 2026-10-05
+Stopped early by decision, before its verdict date. 10 cycles: 3 directional days (9 LONG, scored: see
+research/v2_final_gate.txt), then 21 consecutive NO_TRADE (confidence high) from 2026-09-29. Every NO_TRADE cited the
+mandatory 1.5x net reward:risk floor on a 24 h horizon. Finding: with that floor, the analyst rarely finds a qualifying
+setup; v2 is NOT DECIDABLE and is not merged with any later protocol.
+
+## PROTOCOL v3 — forced daily direction (registered 2026-10-05, counts from 2026-10-06)
+- Same instruments (BTC/ETH/SOL), schedule (00:15 UTC), model, horizon (1 day), entry window (12 h), costs and scoring.
+- Changes vs v2: the agent must choose LONG or SHORT every day (no NO_TRADE); doubt is expressed via confidence.
+  Net reward:risk floor lowered from 1.5 to 1.0. Entry zone must contain the last price or lie within 0.5x 1h ATR of it.
+- Gate: unchanged thresholds (≥30 directional, ≥20 distinct days, ≥50% entered, hit rate ≥50%, expectancy ≥ +0.10 R,
+  both halves positive) + must beat the better of always-long / always-short by ≥ 0.10 R per forecast
+  + NO_TRADE/invalid answers ≤ 10% of v3 forecasts (otherwise the analyst does not follow the protocol → FAILED).
+- Confidence subsets (high vs low) are reported for information only; no subset can pass the gate on its own.
+- Decision rules as for v2, with dates moved: verdict expected 2026-10-26; if fewer than 20 directional days by
+  2026-11-02 → NOT DECIDABLE and stop. PASSED → Phase 2 dry-run. FAILED → close as negative; no v4 with a looser
+  rule on the same hypothesis.
