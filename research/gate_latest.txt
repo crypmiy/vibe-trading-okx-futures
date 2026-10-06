@@ -7,7 +7,7 @@ NOT YET DECIDABLE — 0/30 directional forecasts, 0/20 cycles scored
   [ ] expectancy ≥ +0.10 R net
   [ ] both temporal halves positive
   [ ] beats best constant direction by ≥0.10 R/forecast
-  [ ] NO_TRADE/invalid ≤10% of forecasts (0/0)
+  [x] NO_TRADE/invalid ≤10% of forecasts (0/3)
   [ ] ≥14 distinct calendar days (0)
   [ ] ≥20 distinct cycle dates
   open/entered: 3 · NO_TRADE calls: 0
