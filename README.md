@@ -1,5 +1,7 @@
 # vibe-trading-okx-futures
 
+> **CLOSED 2026-10-11 — confirmed negative result.** See [research/GATES.md](research/GATES.md) and [research/v3_final_gate.txt](research/v3_final_gate.txt).
+
 ![Exchange](https://img.shields.io/badge/exchange-OKX%20USDT%20swaps-black)
 ![Agent](https://img.shields.io/badge/analyst-Antigravity%20CLI%20(agy)-4285F4)
 ![Data](https://img.shields.io/badge/data-Colab%20CLI-F9AB00)

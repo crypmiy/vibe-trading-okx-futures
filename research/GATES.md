@@ -70,3 +70,12 @@ setup; v2 is NOT DECIDABLE and is not merged with any later protocol.
 - Gate adds: ≥14 distinct calendar days (forecasts within a day are correlated). Other thresholds unchanged.
 - Dates: verdict expected 2026-10-20 (morning after the 14th day is scored); NOT DECIDABLE if <14 directional days by 2026-10-27.
 - 2026-10-05: Freqtrade dry-run history reset before v3 (pre-v3 trades were technical tests; backup in freqtrade/backups/).
+
+## CLOSED 2026-10-11 — confirmed negative result
+Protocol v3 stopped for futility on 2026-10-11 (6 of 14 required days). Not pre-registered as a stopping rule, but a
+futility stop can only produce a negative verdict. At stop: 45 directional forecasts, 43 entered, hit rate 5/43
+(95% CI 5-24%), expectancy -0.63 R net, both halves negative; AI -0.60 R/forecast vs always-long -0.67 and
+always-short +0.05. Passing would have required about +0.55 R on every remaining forecast.
+Overall finding (v2 + v3): this prompt-based AI analyst showed no directional edge on OKX BTC/ETH/SOL perpetuals,
+neither with a strict 1.5x R:R floor (v2: abstained) nor when forced to pick a side (v3). Per the decision rules,
+no looser v4 on the same hypothesis. Final gate: research/v3_final_gate.txt; all forecasts: research/forecasts.csv.
